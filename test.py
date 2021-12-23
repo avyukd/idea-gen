@@ -1,9 +1,13 @@
+import configparser
 from screeners import InsiderScreener, RedditScreener
 from core import UserType, Idea, Screener
 from utils import extract_tickers
 from datetime import datetime
 import praw 
 import nltk
+import twitter 
+import configparser
+
 def insider_screener_test():
     #iscreener = InsiderScreener(initial_screen=True)
     #insider_ideas = iscreener.getIdeas()
@@ -32,11 +36,27 @@ def test_reddit_screener():
     for idea in reddit_ideas:
         print(idea)
 
+def twitterApiTest():
+    #get twitter posts that I have liked, extract tickers from them, and then add ideas of those
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    consumer_key = config["twitterApi"]["apiKey"]
+    consumer_secret = config["twitterApi"]["apiKeySecret"]
+    access_token = config["twitterApi"]["accessToken"]
+    access_token_secret = config["twitterApi"]["accessTokenSecret"]
+    api = twitter.Api(consumer_key=consumer_key,
+                  consumer_secret=consumer_secret,
+                  access_token_key=access_token,
+                  access_token_secret=access_token_secret)
+    test = twitter.Api.getUserStream(screen_name="@WallStreetBets")
+    print(test)
+
 if __name__ == "__main__":
+    twitterApiTest()
     #nltk.download('words')
     #insider_screener_test()
     #test_extract_tickers()
-    test_reddit_screener()
+    #test_reddit_screener()
     #reddit = praw.Reddit(client_id="8IWdjzbaAvn14TucQHakqw", client_secret="fsBuNhMQNaaUEYqCWvWMrFqXXeuCGA", user_agent='Idea Screener')
     #new_dd_posts = reddit.subreddit("wallstreetbets").search('flair:DD',limit=500, params={'sort':'new'})
     #get all new posts
